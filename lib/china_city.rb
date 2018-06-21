@@ -37,14 +37,17 @@ module ChinaCity
       children = data
       return children[id][:text] if children.has_key?(id)
       province_id = province(id)
+      return '' unless children[province_id]
       province_text = children[province_id][:text]
       children = children[province_id][:children]
       return "#{prepend_parent ? province_text : ''}#{children[id][:text]}" if children.has_key?(id)
       city_id = city(id)
+      return province_text unless children[city_id]
       city_text = children[city_id][:text]
       children = children[city_id][:children]
       return "#{prepend_parent ? (province_text + city_text) : ''}#{children[id][:text]}" if children.has_key?(id)
       district_id = district(id)
+      return province_text + city_text unless children[district_id]
       district_text = children[district_id][:text]
       children = children[district_id][:children]
       return "#{prepend_parent ? (province_text + city_text + district_text) : ''}#{children[id][:text]}"
